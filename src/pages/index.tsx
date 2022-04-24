@@ -1,11 +1,32 @@
 import { Box, Center, Divider, Flex, Heading, Image, Text, useBreakpointValue } from "@chakra-ui/react";
+
+import { EffectFade, Navigation, Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+
 import { BaseContainer } from "../components/BaseContainer";
-import { Slider } from "../components/Slider";
 import { TravelType } from "../components/TravelType";
 
-import * as styles from './home.styles'
+import 'swiper/css';
+import "swiper/css/effect-fade";
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
-export default function Home() {
+import * as styles from './home.styles'
+import { GetStaticProps } from "next";
+import { SlideItem } from "../components/SlideItem";
+
+type Continent = {
+  title: string;
+  caption: string;
+  img: string;
+  page: string;
+}
+
+interface HomeProps {
+  continents: Continent[];
+}
+
+export default function Home({ continents }: HomeProps) {
   const hasAirplane = useBreakpointValue({
     base: false,
     md: false,
@@ -57,7 +78,51 @@ export default function Home() {
         <Divider bg="text.headings.gray" h={0.5} w={90} my="10" />
       </Center>
 
-      <Slider />
+      <Center>
+        <Heading as="h2" {...styles.Heading}>
+          Vamos nessa? <br />
+          Então escolha seu continente
+        </Heading>
+      </Center>
+
+      <BaseContainer px={0}>
+        <Box {...styles.SliderBox}>
+          <Swiper
+            effect="fade"
+            style={styles.SliderSwiper}
+            modules={[Navigation, Pagination, EffectFade]}
+            slidesPerView={1}
+            navigation
+            pagination={{ clickable: true }}
+          >
+            { continents.map((continent, i) => (
+              <SwiperSlide key={i}>
+                <SlideItem
+                  altImg={continent.title}
+                  img={continent.img}
+                  href={continent.page}
+                  title={continent.title}
+                  caption={continent.caption}
+                />
+              </SwiperSlide>
+            )) }
+        </Swiper>
+        </Box>
+      </BaseContainer>
     </Box>
   )
+}
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const url = 'http://localhost:3000/api/continentes'
+
+  const resp = await fetch(url)
+  const continents = await resp.json() as Continent[]
+
+  return {
+    props: {
+      continents
+    },
+    revalidate: 60 * 1 * 24 // 1 dia
+  }
 }
