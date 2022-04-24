@@ -7,16 +7,9 @@
   background: #FFBA08 !important;
 }
 
-.swiper-button-next {
-  margin-right: 1rem;
-}
-
-.swiper-button-prev {
-  margin-left: 1rem;
-}
-
 .swiper-button-next, .swiper-button-prev {
   color: #FFBA08 !important;
+  padding: 0.5rem 1.5rem;
 }
 
 .swiper-button-disabled {

@@ -13,6 +13,14 @@ import * as styles from './styles'
 import { SlideItem } from "./SlideItem";
 
 export function Slider() {
+  const slides = [
+    { title: 'América do Sul', caption: 'O continente da diversidade de pessoas, etnias e línguas', img: '/assets/south-america.png', page: '/continents/america-do-sul' },
+    { title: "África", caption: 'O berço da humanidade', img: '/assets/africa.png', page: '/continents/africa' },
+    { title: 'América do Norte', caption: "Onde o Tio Sam reina", img: '/assets/north-america.png', page: '/continents/america-do-norte' },
+    { title: 'Europa', caption: 'O continente mais antigo.', img: '/assets/europe.png', page: '/continents/europa'  },
+    { title: 'Oceania', caption: 'O continente mais isolado', img: '/assets/oceania.png', page: '/continents/oceania' }
+  ]
+
   return (
     <>
       <Center>
@@ -22,7 +30,7 @@ export function Slider() {
         </Heading>
       </Center>
 
-      <BaseContainer>
+      <BaseContainer px={0}>
         <Box {...styles.SliderBox}>
           <Swiper
             effect="fade"
@@ -32,24 +40,18 @@ export function Slider() {
             navigation
             pagination={{ clickable: true }}
           >
-            <SwiperSlide>
-              <SlideItem
-                altImg="Europa"
-                img="/assets/banner.png"
-                href="/teste"
-                title="Europa"
-                caption="O continente mais antigo."
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <SlideItem
-                altImg="Europa"
-                img="/assets/banner.png"
-                href="/teste"
-                title="Europa"
-                caption="O continente mais antigo."
-              />
-            </SwiperSlide>
+            { slides.map((continent, i) => (
+              <SwiperSlide key={i}>
+                <SlideItem
+                  altImg={continent.title}
+                  img={continent.img}
+                  href={continent.page}
+                  title={continent.title}
+                  caption={continent.caption}
+                />
+              </SwiperSlide>
+            )) }
+            
         </Swiper>
         </Box>
       </BaseContainer>

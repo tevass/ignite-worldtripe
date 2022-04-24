@@ -9,13 +9,9 @@ export const Container: LinkProps = {
   h: "100%",
   _hover: {
     textDecoration: "none"
-  }
-}
-
-export const Background: ImageProps = {
-  position: "absolute",
-  w: "100%",
-  h: "100%"
+  },
+  bgPosition: "center",
+  bgRepeat: "no-repeat",
 }
 
 export const Content: BoxProps = {

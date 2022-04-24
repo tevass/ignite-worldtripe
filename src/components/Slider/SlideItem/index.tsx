@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Image, Text, Link as ChakraLink } from '@chakra-ui/react'
+import { Box, Flex, Heading, Image, Text, Link as ChakraLink, LinkProps } from '@chakra-ui/react'
 import Link from 'next/link'
 
 import * as styles from './styles'
@@ -14,8 +14,8 @@ interface SlideItemProps {
 export function SlideItem({ altImg, caption, href, img, title }: SlideItemProps) {
   return (
     <Link href={href} passHref>
-      <ChakraLink as="a" {...styles.Container}>
-        <Image src={img} alt={altImg} {...styles.Background} />
+      <ChakraLink as="a" {...styles.Container} bgImage={`url('${img}')`} >
+        {/* <Image src={img} alt={altImg} {...styles.Background} /> */}
         <Box {...styles.Content}>
           <Heading {...styles.Heading}>
             {title}
