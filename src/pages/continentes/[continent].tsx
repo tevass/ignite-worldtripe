@@ -4,11 +4,13 @@ import { Box, Flex, Heading, Icon, SimpleGrid, Text, Tooltip, VStack } from "@ch
 
 import * as styles from './continent.styles'
 import { BaseContainer } from "../../components/BaseContainer";
+import { api } from "../../services/api";
 
 type Continent = {
   title: string;
   description: string;
   img: string;
+  geonameId: number;
 }
 
 interface ContinentProps {
@@ -83,10 +85,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<ContinentProps> = async ({ params }) => {
   const { continent: continentPage } = params as { continent: string }
 
-  const url = `http://localhost:3000/api/continentes/${continentPage}`
-
-  const resp = await fetch(url)
-  const continent = await resp.json()
+  const resp = await api.get<Continent>(`/continentes/${continentPage}`)
+  const continent = resp.data
 
   return {
     props: {

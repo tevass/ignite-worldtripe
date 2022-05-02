@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 import * as styles from './home.styles'
 import { GetStaticProps } from "next";
 import { SlideItem } from "../components/SlideItem";
+import { api } from "../services/api";
 
 type Continent = {
   title: string;
@@ -114,10 +115,8 @@ export default function Home({ continents }: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const url = 'http://localhost:3000/api/continentes'
-
-  const resp = await fetch(url)
-  const continents = await resp.json() as Continent[]
+  const response = await api.get<Continent[]>("/continentes")
+  const continents = response.data
 
   return {
     props: {
