@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { InfoOutlineIcon } from '@chakra-ui/icons'
-import { Box, Flex, Heading, Icon, SimpleGrid, Text, Tooltip, VStack } from "@chakra-ui/react";
+import { Box, Flex, Heading, HStack, Icon, SimpleGrid, Text, Tooltip } from "@chakra-ui/react";
 
 import * as styles from './continent.styles'
 import { BaseContainer } from "../../components/BaseContainer";
@@ -11,6 +11,8 @@ type Continent = {
   description: string;
   img: string;
   geonameId: number;
+  countriesCount: number;
+  languagesCount: number;
 }
 
 interface ContinentProps {
@@ -34,41 +36,33 @@ export default function Continent({ continent }: ContinentProps) {
             <Text {...styles.Text}>
               {continent.description}
             </Text>
-            <Text {...styles.Text}>
-              {continent.description}
-            </Text>
-          </SimpleGrid>
-          <Flex>
-            <VStack>
-              <Box>
-                <Heading as="span">
-                  50
+            <HStack {...styles.Stats}>
+              <Box {...styles.Stat}>
+                <Heading as="span" {...styles.StatHeader}>
+                  {continent.countriesCount}
                 </Heading>
-                <Text>
+                <Text {...styles.StatText}>
                   países
                 </Text>
               </Box>
-              <Box>
-                <Heading as="span">
-                  60
+              <Box {...styles.Stat}>
+                <Heading as="span" {...styles.StatHeader}>
+                  {continent.languagesCount}
                 </Heading>
-                <Text>
+                <Text {...styles.StatText}>
                   línguas
                 </Text>
               </Box>
-              <Box>
-                <Heading as="span">
+              <Box {...styles.Stat}>
+                <Heading as="span" {...styles.StatHeader}>
                   60
                 </Heading>
-                <Text>
-                  línguas 
-                  <Tooltip label="Mais 100 cidades">
-                    <Icon as={InfoOutlineIcon} />
-                  </Tooltip>
+                <Text {...styles.StatText}>
+                  cidades 
                 </Text>
               </Box>
-            </VStack>
-          </Flex>
+            </HStack>
+          </SimpleGrid>
         </Box>
       </BaseContainer>
     </Box>

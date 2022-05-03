@@ -54,7 +54,7 @@ function getContinentLanguages(countries: Country[]) {
     linguas.forEach(language => languages.add(language.nome))
   })
 
-  return languages.values()  
+  return languages
 }
 
 export default async function Continent(req: NextApiRequest, resp: NextApiResponse) {
@@ -70,7 +70,11 @@ export default async function Continent(req: NextApiRequest, resp: NextApiRespon
     const continentCountries = getCountriesByContinent(countries.data, continent.title)
     const continentLanguages = getContinentLanguages(continentCountries)
 
-    return resp.json(continent)
+    return resp.json({
+      ...continent,
+      countriesCount: continentCountries.length,
+      languagesCount: continentLanguages.size
+    })
   }
 
   return resp.status(405).json({ message: 'Method not allowed' })
