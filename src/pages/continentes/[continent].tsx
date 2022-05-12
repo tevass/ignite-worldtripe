@@ -1,10 +1,10 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { Box, Flex, Heading, HStack, Icon, SimpleGrid, Text, Tooltip } from "@chakra-ui/react";
 
 import * as styles from './continent.styles'
 import { BaseContainer } from "../../components/BaseContainer";
 import { api } from "../../services/api";
+import { City } from "../../components/City";
 
 type Continent = {
   title: string;
@@ -15,11 +15,23 @@ type Continent = {
   languagesCount: number;
 }
 
-interface ContinentProps {
-  continent: Continent
+type City = {
+  geonameId: string;
+  name: string;
+  countryName: string;
 }
 
-export default function Continent({ continent }: ContinentProps) {
+type Cities = {
+  totalResultsCount: number;
+  totalCities: City[]
+}
+
+interface ContinentProps {
+  continent: Continent
+  cities: Cities;
+}
+
+export default function Continent({ continent, cities }: ContinentProps) {
   return (
     <Box>
       <Box {...styles.Header} bgImage={`url('${continent.img}')`}>
@@ -55,7 +67,7 @@ export default function Continent({ continent }: ContinentProps) {
               </Box>
               <Box {...styles.Stat}>
                 <Heading as="span" {...styles.StatHeader}>
-                  60
+                  { cities.totalResultsCount }
                 </Heading>
                 <Text {...styles.StatText}>
                   cidades 
@@ -65,6 +77,20 @@ export default function Continent({ continent }: ContinentProps) {
           </SimpleGrid>
         </Box>
       </BaseContainer>
+
+      <BaseContainer>
+        <Box>
+          <Heading {...styles.CityHeading}>Cidades</Heading>
+        </Box>
+        <SimpleGrid>
+          { cities.totalCities.map(city => (
+            <City
+              key={city.geonameId}
+            />
+          )) }
+        </SimpleGrid>
+      </BaseContainer>
+
     </Box>
   )
 }
@@ -82,9 +108,13 @@ export const getStaticProps: GetStaticProps<ContinentProps> = async ({ params })
   const resp = await api.get<Continent>(`/continentes/${continentPage}`)
   const continent = resp.data
 
+  const { data } = await api.get<Cities>(`/continentes/${continentPage}/cities`)
+  const cities = data
+
   return {
     props: {
-      continent
+      continent,
+      cities
     }
   }
 }

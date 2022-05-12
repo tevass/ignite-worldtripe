@@ -11,12 +11,15 @@ type Continent = {
   geonameId: number;
 }
 
+type City = {
+  geonameId: string;
+  name: string;
+  countryName: string;
+}
+
 type Geoname = {
-  geonames: {
-    geonameId: string;
-    name: string;
-    countryName: string;
-  }[]
+  totalResultsCount: number;
+  geonames: City[]
 }
 
 export default async function Cities(req: NextApiRequest, resp: NextApiResponse) {
@@ -30,8 +33,6 @@ export default async function Cities(req: NextApiRequest, resp: NextApiResponse)
       params: { 'geonameId': continent.geonameId  }
     })
 
-    console.log(countries)
-
     const cities = await Promise.all(countries.geonames.map(async (country) => {
       const { data: states } = await geonames.get<Geoname>('', {
         params: { 'geonameId': country.geonameId }
@@ -40,9 +41,14 @@ export default async function Cities(req: NextApiRequest, resp: NextApiResponse)
       return states
     }))
 
-    console.log(JSON.stringify(cities, null, 2))
+    const allCities = cities.reduce((allCities, city) => {
+      return allCities = {
+        totalResultsCount: allCities.totalResultsCount + city.totalResultsCount,
+        totalCities: [...allCities.totalCities, city.geonames]
+      }
+    }, { totalResultsCount: 0, totalCities: [] })
 
-    return resp.json({ ok: 'ok' })
+    return resp.json(allCities)
   }
 
   return resp.status(405).json({ message: 'Method not allowed' })

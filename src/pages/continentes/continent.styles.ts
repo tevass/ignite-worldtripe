@@ -49,3 +49,8 @@ export const StatHeader: HeadingProps = {
 export const StatText: TextProps = {
   fontWeight: "semibold",
 }
+
+export const CityHeading: HeadingProps = {
+  fontSize: "2xl",
+  fontWeight: "medium"
+}
