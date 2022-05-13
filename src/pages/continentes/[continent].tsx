@@ -78,14 +78,16 @@ export default function Continent({ continent, cities }: ContinentProps) {
         </Box>
       </BaseContainer>
 
-      <BaseContainer>
-        <Box>
+      <BaseContainer direction="column" mt="8">
+        <Box mb="8">
           <Heading {...styles.CityHeading}>Cidades</Heading>
         </Box>
-        <SimpleGrid>
+        <SimpleGrid {...styles.CitiesGrid}>
           { cities.totalCities.map(city => (
             <City
               key={city.geonameId}
+              name={city.name}
+              country={city.countryName}
             />
           )) }
         </SimpleGrid>

@@ -30,25 +30,21 @@ export default async function Cities(req: NextApiRequest, resp: NextApiResponse)
     const continent = response.data.find((continent) => continent.page.includes(page))
 
     const { data: countries } = await geonames.get<Geoname>('', {
-      params: { 'geonameId': continent.geonameId  }
+      params: { 'geonameId': continent.geonameId }
     })
 
-    const cities = await Promise.all(countries.geonames.map(async (country) => {
-      const { data: states } = await geonames.get<Geoname>('', {
-        params: { 'geonameId': country.geonameId }
-      })
+    const { data: states } = await geonames.get<Geoname>('', {
+      params: { 'geonameId': countries.geonames[8].geonameId }
+    })
 
-      return states
-    }))
+    const { data: geoname } = await geonames.get<Geoname>('', {
+      params: { 'geonameId': states.geonames[0].geonameId }
+    })
 
-    const allCities = cities.reduce((allCities, city) => {
-      return allCities = {
-        totalResultsCount: allCities.totalResultsCount + city.totalResultsCount,
-        totalCities: [...allCities.totalCities, city.geonames]
-      }
-    }, { totalResultsCount: 0, totalCities: [] })
-
-    return resp.json(allCities)
+    return resp.json({
+      totalResultsCount: geoname.totalResultsCount,
+      totalCities: geoname.geonames
+    })
   }
 
   return resp.status(405).json({ message: 'Method not allowed' })

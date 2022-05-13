@@ -54,3 +54,9 @@ export const CityHeading: HeadingProps = {
   fontSize: "2xl",
   fontWeight: "medium"
 }
+
+export const CitiesGrid: SimpleGridProps = {
+  minChildWidth: 192,
+  columns: 4,
+  spacing: "8"
+}
